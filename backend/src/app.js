@@ -1,11 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+
 const db = require("./db");
+const polyclinicsRoutes = require("./routes/polyclinics.routes");
+const doctorsRoutes = require("./routes/doctors.routes");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/api/polyclinics", polyclinicsRoutes);
+app.use("/api/doctors", doctorsRoutes);
 
 // test server
 app.get("/", (req, res) => {

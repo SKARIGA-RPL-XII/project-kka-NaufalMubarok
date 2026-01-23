@@ -73,3 +73,50 @@ CREATE TABLE visits (
   CONSTRAINT fk_visits_queue FOREIGN KEY (queue_id) REFERENCES queues(id)
     ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+-- TABLE JADWAL DOKTER
+CREATE TABLE doctor_schedules (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  doctor_id INT NOT NULL,
+  day_of_week TINYINT NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  quota INT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_schedule_doctor
+    FOREIGN KEY (doctor_id)
+    REFERENCES doctors(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- TABLE BOOKING
+CREATE TABLE bookings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  booking_code VARCHAR(20) NOT NULL UNIQUE,
+  booking_date DATE NOT NULL,
+  patient_id INT NOT NULL,
+  polyclinic_id INT NOT NULL,
+  doctor_id INT NOT NULL,
+  status ENUM('BOOKED','CHECKED_IN','CANCELLED','EXPIRED')
+    NOT NULL DEFAULT 'BOOKED',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT fk_booking_patient
+    FOREIGN KEY (patient_id)
+    REFERENCES patients(id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_booking_poly
+    FOREIGN KEY (polyclinic_id)
+    REFERENCES polyclinics(id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT fk_booking_doctor
+    FOREIGN KEY (doctor_id)
+    REFERENCES doctors(id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+
+  UNIQUE KEY uq_booking_once (booking_date, patient_id, polyclinic_id)
+);
