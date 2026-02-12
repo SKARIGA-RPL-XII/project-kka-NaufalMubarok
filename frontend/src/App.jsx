@@ -47,7 +47,13 @@ function NavBar() {
   return (
     <header className="nav">
       <div className="logo">
-        <Link to={user ? (user.role === "ADMIN" ? "/admin" : "/patient") : "/login"}>Hospiline</Link>
+        <Link
+          to={user ? (user.role === "ADMIN" ? "/admin" : "/patient") : "/login"}
+          className="logo-link"
+        >
+          <img src="/gambar/hospiline1.png" alt="Hospiline" className="logo-img" />
+          <span className="sr-only">Hospiline</span>
+        </Link>
       </div>
       <nav className="nav-links">
         {navItems.map((item) => (
